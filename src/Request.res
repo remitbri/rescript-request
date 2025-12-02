@@ -139,7 +139,7 @@ let make = (
       },
     )
     switch timeout {
-    | Some(timeout) => xhr->setTimeout(timeout)
+    | Some(timeout) => xhr->XMLHttpRequest.setTimeout(timeout)
     | None => ()
     }
     switch headers {
@@ -193,9 +193,9 @@ let make = (
       }
       resolve(
         Ok({
-          status: status,
+          status,
           ok: status >= 200 && status < 300,
-          response: response,
+          response,
           xhr: xhr->asXhr,
         }),
       )
