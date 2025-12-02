@@ -12,10 +12,12 @@
       "type": "dev"
     }
   ],
-  "package-specs": {
-    "module": "es6",
-    "in-source": true
-  },
+  "package-specs": [
+    {
+      "module": "esmodule",
+      "in-source": true
+    }
+  ],
   "bs-dependencies": ["rescript-future"],
   "bs-dev-dependencies": ["rescript-test"],
   "suffix": ".mjs",
