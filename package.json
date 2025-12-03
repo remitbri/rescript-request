@@ -13,11 +13,11 @@
   "author": "bloodyowl <bloodyowl@icloud.com>",
   "license": "MIT",
   "devDependencies": {
-    "rescript": "12.0.0-alpha.4",
-    "rescript-test": "remitbri/rescript-test.git#alpha4"
+    "rescript": "12.0.0-alpha.5",
+    "rescript-test": "remitbri/rescript-test.git#alpha5"
   },
   "dependencies": {
-    "rescript-future": "remitbri/rescript-future#alpha4"
+    "rescript-future": "remitbri/rescript-future#alpha5"
   },
   "volta": {
     "node": "22.12.0",
