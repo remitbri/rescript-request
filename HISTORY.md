@@ -1,3 +1,9 @@
+# 4.0.0
+
+Changes:
+
+- Upgrade to ReScript 12 (ca71ac5)
+
 # 3.0.1
 
 Features:
