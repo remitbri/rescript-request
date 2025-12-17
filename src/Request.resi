@@ -5,7 +5,7 @@ type rec responseType<'response> =
   | ArrayBuffer: responseType<Js.TypedArray2.ArrayBuffer.t>
   | Document: responseType<Dom.document>
   | Blob: responseType<blob>
-  | Json: responseType<Js.Json.t>
+  | Json: responseType<JSON.t>
   | JsonAsAny: responseType<'response>
 
 type error = [#NetworkRequestFailed | #Timeout]
@@ -34,7 +34,7 @@ let make: (
   ~method: method=?,
   ~responseType: responseType<'payload>,
   ~body: 'body=?,
-  ~headers: Js.Dict.t<string>=?,
+  ~headers: dict<string>=?,
   ~withCredentials: bool=?,
   ~onLoadStart: progressEvent => unit=?,
   ~onProgress: progressEvent => unit=?,

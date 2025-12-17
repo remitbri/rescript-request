@@ -5,7 +5,7 @@ type rec responseType<'response> =
   | ArrayBuffer: responseType<Js.TypedArray2.ArrayBuffer.t>
   | Document: responseType<Dom.document>
   | Blob: responseType<blob>
-  | Json: responseType<Js.Json.t>
+  | Json: responseType<JSON.t>
   | JsonAsAny: responseType<'response>
 
 type method = [#GET | #POST | #OPTIONS | #PATCH | #PUT | #DELETE]
@@ -27,7 +27,7 @@ module XMLHttpRequest = {
   @set
   external setResponseType: (t<'input, 'responseType>, string) => unit = "responseType"
   @set
-  external setTimeout: (t<'input, 'responseType>, int) => unit = "timeout"
+  external setXhrTimeout: (t<'input, 'responseType>, int) => unit = "timeout"
   @send
   external setRequestHeader: (t<'input, 'responseType>, string, string) => unit = "setRequestHeader"
   @send external send: (t<'input, 'responseType>, 'input) => unit = "send"
@@ -35,7 +35,7 @@ module XMLHttpRequest = {
   @get external status: t<'input, 'responseType> => int = "status"
   @get external responseText: t<'input, 'responseType> => string = "responseText"
   @get
-  external response: t<'input, 'responseType> => Js.Nullable.t<'responseType> = "response"
+  external response: t<'input, 'responseType> => Nullable.t<'responseType> = "response"
   @send
   external addLoadEventListener: (t<'input, 'responseType>, @as("load") _, unit => unit) => unit =
     "addEventListener"
@@ -114,7 +114,7 @@ let make = (
   ~method: method=#GET,
   ~responseType: responseType<payload>,
   ~body: option<body>=?,
-  ~headers: option<Js.Dict.t<string>>=?,
+  ~headers: option<dict<string>>=?,
   ~withCredentials=false,
   ~onLoadStart=?,
   ~onProgress=?,
@@ -139,14 +139,14 @@ let make = (
       },
     )
     switch timeout {
-    | Some(timeout) => xhr->setTimeout(timeout)
+    | Some(timeout) => xhr->setXhrTimeout(timeout)
     | None => ()
     }
     switch headers {
     | Some(headers) =>
       headers
-      ->Js.Dict.entries
-      ->Js.Array2.forEach(((key, value)) => {
+      ->Dict.toArray
+      ->Array.forEach(((key, value)) => {
         xhr->setRequestHeader(key, value)
       })
     | None => ()
@@ -174,18 +174,18 @@ let make = (
     and loadListener = () => {
       cleanupEvents()
       let status = xhr->status
-      let response = xhr->response->Js.Nullable.toOption
+      let response = xhr->response->Nullable.toOption
       // Internet Explorer has a bug on the JSON type
       let response: option<payload> = switch (responseType, response) {
-      | (Json, Some(response)) if Js.typeof(response) == "string" =>
+      | (Json, Some(response)) if typeof(response) == #string =>
         try {
-          Some(Js.Json.parseExn(xhr->responseText)->Obj.magic)
+          Some(JSON.parseOrThrow(xhr->responseText)->Obj.magic)
         } catch {
         | _ => None
         }
-      | (JsonAsAny, Some(response)) if Js.typeof(response) == "string" =>
+      | (JsonAsAny, Some(response)) if typeof(response) == #string =>
         try {
-          Some(Js.Json.parseExn(xhr->responseText)->Obj.magic)
+          Some(JSON.parseOrThrow(xhr->responseText)->Obj.magic)
         } catch {
         | _ => None
         }
@@ -193,9 +193,9 @@ let make = (
       }
       resolve(
         Ok({
-          status: status,
+          status,
           ok: status >= 200 && status < 300,
-          response: response,
+          response,
           xhr: xhr->asXhr,
         }),
       )

@@ -1,6 +1,5 @@
 {
   "name": "rescript-request",
-  "version": "0.1.0",
   "sources": [
     {
       "dir": "src",
@@ -16,8 +15,8 @@
     "module": "es6",
     "in-source": true
   },
-  "bs-dependencies": ["rescript-future"],
-  "bs-dev-dependencies": ["rescript-test"],
+  "dependencies": ["rescript-future"],
+  "dev-dependencies": ["rescript-test"],
   "suffix": ".mjs",
   "warnings": {
     "error": "+101"
