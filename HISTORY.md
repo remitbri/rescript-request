@@ -1,3 +1,9 @@
+# 4.0.1
+
+Changes:
+
+- Prepare for ReScript 12 (d8c3459)
+
 # 4.0.0
 
 Changes:
